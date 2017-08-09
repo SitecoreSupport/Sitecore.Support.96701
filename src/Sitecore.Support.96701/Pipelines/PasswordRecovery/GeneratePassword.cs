@@ -12,23 +12,23 @@
             Assert.IsNotNull(args, "args");
             MembershipUser user = Membership.GetUser(args.Username);
           
-            #region Modified code
-
             if (user == null)
             {
                 args.AbortPipeline();
-            }          
+            }
+
+            #region Added code
             if (user.IsLockedOut)
             {
                 Log.Error("The account of the specified user was locked out.", this);
                 args.AbortPipeline();
-            }
+            }              
+            #endregion
+
             else
             {
                 args.Password = user.ResetPassword();
             }
-
-            #endregion
         }
     }
 }
